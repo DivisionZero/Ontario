@@ -51,6 +51,14 @@ class ObjectList  implements Iterator {
 		return $this->list;
 	}
 
+	public function get_object($object_id, $only_one = true) {
+		return $this->find_object($object_id, 'get_id');
+	}
+
+	public function get_object_by_name($object_name, $only_one = true) {
+		return $this->find_object($object_name, 'get_name');
+	}
+
 	/* Iterator Methods */
 
 	public function current() {
@@ -91,5 +99,19 @@ class ObjectList  implements Iterator {
 	private function reindex_array() {
 		$this->count = count($this->list);
 		$this->rewind();
+	}
+	
+	private function find_object($target, $function) {
+		$obj_list = array();
+		foreach($this->list as $obj) {
+			if($obj->$function() == $target) {
+				if($only_one === true) {
+					return $obj;
+				} else {
+					$obj_list[] = $obj;
+				}
+			}
+		}
+		return count($obj_list) > 0 ? $obj_list : null;
 	}
 }

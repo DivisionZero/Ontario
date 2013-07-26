@@ -1,8 +1,9 @@
 <?
-class TypeObjectList  extends ObjectList {
-	private $type_id;
+class TypeObjectList extends ObjectList {
+	private $type;
 
-	public function __construct($anything = array()) {
+	public function __construct($anything = array(), Type $type = null) {
+		$this->type = $type;
 		parent::__construct($anything);
 		$this->validate_list($this->list);
 	}
@@ -14,12 +15,12 @@ class TypeObjectList  extends ObjectList {
 		return true;
 	}
 
-	private function check_type($check) {
-		if(!isset($this->type_id)) {
-			$this->type_id = $check;
+	private function check_type(Type $check = null) {
+		if(!isset($this->type)) {
+			$this->type = $check;
 		} else {
-			if($this->type_id !== $check) {
-				throw new Exception("TypeObjectList must have objects of the same type");
+			if($this->type->get_id() !== $check->get_id()) {
+				throw new Exception("TypeObjectList expecting objects of type: ".$this->type->get_id().":".$this->type->get_name());
 				return false;
 			}
 		}

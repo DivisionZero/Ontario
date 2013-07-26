@@ -33,7 +33,7 @@ class Object {
 	}
 
 	public function get_type() {
-		return ($this->type !== null) ? $this->type->get_id() : null;
+		return ($this->type !== null) ? $this->type : null;
 	}
 
 	private function create_name() {

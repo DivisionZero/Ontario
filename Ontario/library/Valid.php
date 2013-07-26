@@ -29,4 +29,12 @@ class Valid {
 		}
 		return true;
 	}
+
+	public static function positive_int($value) {
+		if(Valid::integer($value) && $value >= 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

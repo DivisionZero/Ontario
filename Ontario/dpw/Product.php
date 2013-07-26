@@ -7,7 +7,7 @@ class Product extends Object {
 	private $spike_low = array();
 
 	public function __construct($id, $name, Price $price = null, Rarity $rarity) {
-		parent::__construct($id, $name, new Type(self::OBJECT_TYPE, 'Product'));
+		parent::__construct($id, $name, self::get_type());
 		$this->price = $price;
 		$this->spike_high = $this->spike_low = array();
 	}
@@ -40,5 +40,9 @@ class Product extends Object {
 
 	public function make_spike_low() {
 		$this->spike_low[] = 1;
+	}
+
+	public static function get_type() {
+		return new Type(self::OBJECT_TYPE, 'Product');
 	}
 }

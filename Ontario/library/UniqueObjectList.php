@@ -2,8 +2,8 @@
 class UniqueObjectList extends TypeObjectList {
 	private $id_array;
 
-	public function __construct($anything = array()) {
-		parent::__construct($anything);
+	public function __construct($anything = array(), Type $type = null) {
+		parent::__construct($anything, $type);
 		$this->id_array = array();
 		$this->validate_list($this->list);
 	}
@@ -25,5 +25,13 @@ class UniqueObjectList extends TypeObjectList {
 	public function add_element($object) {
 		parent::add_element($object);
 		$this->add_id($object->get_id());
+	}
+
+	public function get_object($object_id) {
+		return parent::get_object($object_id, true);
+	}
+
+	public function get_object_by_name($object_name) {
+		return parent::get_object_by_name($object_name, true);
 	}
 }
