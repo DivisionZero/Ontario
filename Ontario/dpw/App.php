@@ -9,16 +9,23 @@ class App {
 
 	public function __construct(GameTemplate $game_template) {
 		$this->player = DPRSession::user();
+		$this->location = DPRSession::location();
+		$this->current_turn = DPRSession::turn();
+		$this->unresolved_events = DPRSEssion::unresolved_events();
 		$this->locations = $game_template->get_locations();
 		$this->event_list = $game_template->get_events();
 		$this->total_turns = $game_template->get_turns();
 	}
 
 	public function take_turn($location_id) {
-		
+		// handle events
+		// arrive at location
+		//		handle bank transactions
+		//		handle sales/purchases
+		//	go to location screen	
 	}
 
-	public function buy_product() {
+	public function buy_product($product, $amount) {
 		if($this->current_screen === App::SCREEN_LOCATION) {
 			return $this->player->buy_product($product, $amount);
 		} else {
@@ -59,17 +66,22 @@ class App {
 	}
 
 	public function change_location($location_id) {
+		// can't go to location without handling events
+		if(/* has events */) {
+			$this->current_screen = App::SCREEN_EVENTS;
+		} else {
+			$this->current_screen = App::SCREEN_LOCATION;
+		}
 		if($this->current_screen === App::SCREEN_LOCATION_SELECT && $location_id !== $this->location->get_id()) {
 			$this->location = $this->locations[$location_id];
 			$this->turn = new Turn($this->location, $this->event_list, $this->player);
-			if(/* has events */) {
-				$this->current_screen = App::SCREEN_EVENTS;
-			} else {
-				$this->current_screen = App::SCREEN_LOCATION;
-			}
 			return true;
 		} else {
-			return false;
+			if($location_id == $this->location->get_id()) {
+				$this->current_screen = App::SCREEN_LOCATION;
+			} else {
+				return false;
+			}
 		}
 	}
 

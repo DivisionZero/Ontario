@@ -1,14 +1,22 @@
 <?
 class PocketList {
+	const DEFAULT_POCKETS = 100;
+	const DEFAULT_MAX_POCKETS = 200;
 	private $product_list;
 	private $pockets;
 	private $max_pockets;
 	private $pocket_count;
+	private $filled_pockets;
 
 	public function __construct(ProductList $product_list, $starting_pockets = self::DEFAULT_POCKETS, $max_pockets = self::DEFAULT_MAX_POCKETS) {
 		$this->product_list = $product_list;
 		$this->pocket_count = $starting_pockets;
 		$this->max_pockets = $max_pockets;
+		$this->filled_pockets = 0;
+	}
+
+	public function get_pocket_count() {
+		return $this->pocket_count;
 	}
 
 	public function add_pockets($num) {
@@ -29,10 +37,11 @@ class PocketList {
 
 	public function add_product(Product $product, $quantity) {
 		$product_id = $product->get_id();
-		$total = $quantity + $this->pocket_count;
-		if($total <= $this->max_pockets) {
-			$this->pocket_count = $total;
-			$found = $this->product_list->find_object($product_id);
+		$total = $quantity + $this->filled_pockets;
+		if($total <= $this->pocket_count) {
+			//$this->pocket_count = $total;
+			$this->filled_pockets = $total;
+			$found = $this->product_list->get_object($product_id);
 			if($found !== null) {
 				if(isset($pockets[$product_id])) {
 					$pockets[$product_id] += $quantity;
@@ -51,10 +60,10 @@ class PocketList {
 
 	public function remove_product(Product $product, $quantity) {
 		$product_id = $product->get_id();
-		$total = $this->pocket_count - $quantity;
+		$total = $this->filled_pockets - $quantity;
 		if($total > 0) {
 			if(isset($pockets[$product_id]) && $pockets[$product_id] >= $quantity) {
-				$this->pocket_count = $total;
+				$this->filled_pockets = $total;
 				$pockets[$product_id] -= $quantity;
 				return true;
 			} 

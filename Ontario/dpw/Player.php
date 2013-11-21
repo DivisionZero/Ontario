@@ -3,11 +3,12 @@ class Player extends Object { // extends Fighter
 	const OBJECT_TYPE = 5;
 	const DEFAULT_MONEY = 0;
 	const DEFAULT_DEBT = 10000;
-	private $pockets;
+	public $pockets;
 	private $money;
+	private $has_tool;
 
-	public function __construct($id, $name, ProductList $product_list, $default_pockets = PocketList::MAX_POCKETS, $max_pockets = PocketList::MAX_DEFAULT_POCKETS) {
-		parent::__construct($id, $name, self::get_type());
+	public function __construct($id, $name, ProductList $product_list, $default_pockets = PocketList::DEFAULT_POCKETS, $max_pockets = PocketList::DEFAULT_MAX_POCKETS) {
+		parent::__construct($id, $name, self::get_object_type());
 		$this->pockets = new PocketList($product_list, $default_pockets, $max_pockets);
 	}
 
@@ -35,11 +36,19 @@ class Player extends Object { // extends Fighter
 		return $this->change_debt($amount + $this->debt);
 	}
 
-	public static function get_type() {
-		return Type(self::OBJECT_TYPE, 'Player');
+	public static function get_object_type() {
+		return new Type(self::OBJECT_TYPE, 'Player');
 	}
 
-	public function get_pocket_list() {
-		return $this->pockets;
+	public function get_tool() {
+		$this->has_tool = true;
+	}
+
+	public function has_tool() {
+		return $this->has_tool;
+	}
+
+	public function get_money() {
+		return $this->money;
 	}
 }

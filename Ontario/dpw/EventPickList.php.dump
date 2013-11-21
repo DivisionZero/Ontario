@@ -1,4 +1,5 @@
 <?
+// Removing
 class EventPickList extends UniqueObjectList {
 	const RARITY_PRESISION = 3;
 

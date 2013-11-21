@@ -1,5 +1,6 @@
 <?
-abstract class Event extends Object {
+abstract class Event extends RarityObject {
+	protected $current_message;
 	const OBJECT_TYPE = 4;
 
 	const EVENT_ENCOUNTER = 0;
@@ -9,26 +10,35 @@ abstract class Event extends Object {
 	const EVENT_BUY_INV = 4;
 	const EVENT_LOSE_OBJ = 5;
 
-	private $rarity;
-
-	public function __construct($id, $label, Rarity $rarity, $event_desc) {
-		__construct($id, $label, self::get_type(), $event_desc);
-		$this->rarity = $rarity;
+	public function __construct($id, $label, Rarity $rarity, $allows_stack_dupes, $event_desc = null) {
+		parent::__construct($id, $label, self::get_object_type(), $rarity, $allows_stack_dupes, $event_desc);
 	}
 
 	public function handle_event() {
-		return false;
+		return Result::create(false, 'no event to handle');
 	}
 
-	public function get_rarity() {
-		return $this->rarity->get_probablity();
+	public function handle_event_response($choice) {
+		return Result::create(true, 'no response to handle');
 	}
 
-	public static function get_type() {
-		return Type(self::OBJECT_TYPE, 'Event');
+	public function get_response_options() {
+		return array();
 	}
 
-	public function can_stack() {
-		return true;
+	public static function get_object_type() {
+		return new Type(self::OBJECT_TYPE, 'Event');
+	}
+
+	public function get_current_message() {
+		return $this->current_message;
+	}
+
+	protected function yes_no_response() {
+		return ['yes' => 'Yes', 'no' => 'No'];
+	}
+
+	protected function ok_response() {
+		return ['ok' => 'OK'];
 	}
 }

@@ -1,35 +1,36 @@
 <?
-class EventList extends TypeObjectList {
-	private $event_type_list = array();
-	private $pick_list;
+class EventList extends RarityObjectList {
+	const EVENT_SPIKE 		= 1;
+	const EVENT_ENCOUNTER 	= 2;
+	CONST EVENT_FOUND_ITEM  = 3;
+	CONST EVENT_BUY_TOOL 	= 4;
+	CONST EVENT_BUY_POCKET  = 5;
+	private $predicted_events;
+	private $random_events;
 
-	public function __construct($event_count = 0, EventPicktList $pick_list) {
-		parent::__construct(null, Event::get_type());
-		$this->pick_list = $pick_list;
-		while($event_count > 0) {
-			if($this->add_random_event() === true) {
-				$event_count--;
-			}
-		}
+	public function __construct($num_events = 0) {
+		parent::__construct(Event::get_type());
+		$this->predicted_events = new EventList();
+		$this->random_events = $this->get_random_object($num_events);
 	}
 
-	private function add_random_event() {
-		// choose event (based off rarity?)
-		$event = $this->pick_list->get_random_event();
-		// check if event can stack if event type exists already
-		if(in_array($event->get_id(), $this->event_type_list)) {
-			if($event->can_stack()) {
-				$this->add_element($event);
-			} else {
-				return false;
-			}
+	public function add_predicted_event(Event $event) {
+		$this->predicted_events->add_element($event);
+	}
+
+	public function get_next_event() {
+		$object = $this->predicted_events->get_object_by_index(0);
+		if($object) {
+			$this->predicted_events->remove_element($object);
+			return $object;
 		} else {
-			$this->add_element($event);
+			$object = $this->random_events->remove_element($object);
+			if($object) {
+				$this->random_events->remove_element($object);
+				return $object;
+			} else {
+				return null;
+			}
 		}
-		// add event to list
-		return true;
-	}
-
-	public function add_predicted_event() {
 	}
 }

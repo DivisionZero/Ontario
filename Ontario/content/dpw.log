@@ -1,0 +1,15 @@
+[spike_high]
+1 = "Addicts are buying {product} at outragious prices!" 
+2 = "Your {product} is top shelf and prices are high." 
+3 = "A local drug bust on {product} is making it a seller's market!" 
+4 = "Welfare checks have arrived!  Addicts have a lot to spend on {product}"
+[spike_low]
+1 = "The streets are saturated with {product} making prices rockbottom."
+2 = "Nobody seems to want your {product} around here."
+3 = "Dealers have a source of cheap {product} making it a buyer's market."
+[buy_pockets]
+1 = "Would you like to buy {size} pockets for ${cost}?"
+[buy_tool]
+1 = "Would you like to buy a {name} for ${cost}?"
+[no_money_tool]
+1 = "You do not have enough money to buy a {tool}.";

@@ -1,0 +1,6 @@
+[test_1]
+1 = "testing : {key_1}!" 
+2 = "testing2 : {key_1}!" 
+[test_2]
+1 = "testing : {key_2}!" 
+2 = "testing2 : {key_2}!" 

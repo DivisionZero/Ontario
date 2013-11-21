@@ -7,11 +7,11 @@ class Price {
 	private $price_high;
 	private $price_low;
 
-	public __construct(Range $range, Spike $spike_high, Spike $spike_low) {
+	public function __construct(Range $range, Spike $spike_high, Spike $spike_low) {
 		$this->range = $range;
 		$this->spike_high = $spike_high;
 		$this->spike_low = $spike_low;
-		$this->price = $this->reset_prices();
+		$this->reset_prices();
 	}
 
 	public function get_price() {
@@ -38,7 +38,7 @@ class Price {
 			$this->price = rand($this->range->get_low(), $this->range->get_middle());
 		}
 		// get high price
-		$this->price_high = $this->price + $this->spike_hight->get_spike();
+		$this->price_high = $this->price + $this->spike_high->get_spike();
 		// get low price
 		$this->price_low = $this->price - $this->spike_low->get_spike();
 	}
