@@ -1,5 +1,5 @@
 <?
-class ObjectList  implements Iterator {
+class ObjectList implements Iterator {
 	protected $list = array();
 	private $position;
 	private $count = 0;
@@ -47,16 +47,61 @@ class ObjectList  implements Iterator {
 		$this->reindex_array();
 	}
 
+	public function remove_element(Object $object) {
+		$index = $this->find_object_index($object);
+		if(!is_null($index)) {
+			unset($this->list[$index]);
+			$this->reindex_array();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public function get_list() {
 		return $this->list;
 	}
 
 	public function get_object($object_id, $only_one = true) {
-		return $this->find_object($object_id, 'get_id');
+		if(!is_numeric($object_id)) {
+			if($object_id instanceof Object) {
+				$object_id = $object_id->get_id();
+			} else {
+				throw new Exception("Parameters must be either an object or object id");
+			}
+		}
+		return $this->find_object($object_id, 'get_id', $only_one);
 	}
 
 	public function get_object_by_name($object_name, $only_one = true) {
-		return $this->find_object($object_name, 'get_name');
+		return $this->find_object($object_name, 'get_name', $only_one);
+	}
+
+	public function get_object_by_index($index) {
+		if(isset($this->list[$index])) {
+			return $this->list[$index];
+		} else {
+			return null;
+		}
+	}
+
+	public function count() {
+		return count($this->list);
+	}
+
+	public function update_object(Object $object, $only_one = true) {
+		$found = false;
+		foreach($this->list as $num => $object_element) {
+			if($object->get_id() == $object_element->get_id() && 
+			   $object->get_type()->get_id() == $object_element->get_type()->get_id()) {
+				$this->list[$num] = $object;
+				$found = true;
+				if($only_one === true) {
+					return true;
+				}
+			}
+		}
+		return $found;
 	}
 
 	/* Iterator Methods */
@@ -98,10 +143,21 @@ class ObjectList  implements Iterator {
 	/* private methods */
 	private function reindex_array() {
 		$this->count = count($this->list);
+		$this->list = array_values($this->list);
 		$this->rewind();
 	}
-	
-	private function find_object($target, $function) {
+
+
+	private function find_object_index(Object $target) {
+		foreach($this->list as $index=>$obj) {
+			if($obj->get_id() == $target->get_id()) {
+				return $index;
+			}
+		}
+		return null;
+	}
+
+	private function find_object($target, $function, $only_one = true) {
 		$obj_list = array();
 		foreach($this->list as $obj) {
 			if($obj->$function() == $target) {

@@ -23,6 +23,10 @@ class Range {
 		}
 	}
 
+	public function get_random() {
+		return rand($this->low, $this->high);
+	}
+
 	public function get_middle() {
 		return $this->middle;
 	}

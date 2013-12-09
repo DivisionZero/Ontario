@@ -2,7 +2,7 @@
 class TypeObjectList extends ObjectList {
 	private $type;
 
-	public function __construct($anything = array(), Type $type = null) {
+	public function __construct($anything = array(), $type) {
 		$this->type = $type;
 		parent::__construct($anything);
 		$this->validate_list($this->list);
@@ -10,25 +10,21 @@ class TypeObjectList extends ObjectList {
 
 	private function validate_list(array $list) {
 		foreach($list as $key=>$value) {
-			$this->check_type($value->get_type());
+			$this->check_type($value);
 		}
 		return true;
 	}
 
-	private function check_type(Type $check = null) {
-		if(!isset($this->type)) {
-			$this->type = $check;
+	private function check_type(Object $value) {
+		if ($value instanceof $this->type) {
+			return true;
 		} else {
-			if($this->type->get_id() !== $check->get_id()) {
-				throw new Exception("TypeObjectList expecting objects of type: ".$this->type->get_id().":".$this->type->get_name());
-				return false;
-			}
+			throw new Exception("Object must be of type {$this->type}");
 		}
-		return true;
 	}
 
 	public function add_element($object) {
 		parent::add_element($object);
-		$this->check_type($object->get_type());
+		$this->check_type($object);
 	}
 }

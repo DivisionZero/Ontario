@@ -1,19 +1,23 @@
 <?
-class Object {
+class Object extends DefaultList {
 	private static $next_id=1;
 	private $id;
 	private $name;
-	private $desc;
-	private $type;	
 	
-	public function __construct($id = null, $name = null, Type $type = null, $desc = null) {
-		$this->id = $id === null ? $this->get_next_id() : $id;
-		if(!Valid::id($this->id)) {
-			throw new Exception("ID is not valid: ".$this->id);
+	public function __construct($id = null, $name) {
+		if ($id === null) {
+			$this->id = $this->get_next_id();
+		} else {
+			$this->id = $id;
+			if(!Valid::id($this->id)) {
+				throw new Exception("ID is not valid: ".$this->id);
+			}
+			self::$next_id = $this->id + 1;
 		}
-		$this->type = $type;
-		$this->name = $name === null ? $this->create_name() : $name;
-		$this->desc = $desc;
+		if (!is_string($name)) {
+			throw new Exception("Name must be a string");
+		}
+		$this->name = $name;
 	}
 
 	public function get_id() {
@@ -22,29 +26,6 @@ class Object {
 
 	public function get_name() {
 		return $this->name;
-	}
-
-	public function get_desc() {
-		return $this->desc;
-	}
-
-	public function get_type_name() {
-		return $this->type->get_name();
-	}
-
-	public function get_type() {
-		return ($this->type !== null) ? $this->type : null;
-	}
-
-	private function create_name() {
-		if($this->type !== null) {
-			$type_name = $this->type->get_name();
-		}
-		if(isset($type_name)) {
-			return $this->id.":{$type_name}";
-		} else {
-			return '';
-		}
 	}
 
 	private function get_next_id() {

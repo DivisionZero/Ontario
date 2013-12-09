@@ -28,7 +28,7 @@ class SpikeEvent extends Event {
 			'product' => $product->get_name(),
 		);
 		$key = 'spike_'.$rarity->get_name();
-		$this->current_message = DPWContent::get_text($key, $text_array);
+		$this->current_message = ContentHolder::$content->get_text($key, $text_array);
 		$location->products->update_object($product);
 		return Result::create(true, $product);
 	}

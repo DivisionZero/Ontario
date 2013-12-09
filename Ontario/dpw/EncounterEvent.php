@@ -8,4 +8,7 @@ class EncounterEvent extends Event {
 	public function handle_event(&Player $player) {
 		$this->player->fight();
 	}
+
+	public function handle_event_response() {
+	}
 }

@@ -8,9 +8,8 @@ class Rarity extends Object {
 	const DEFAULT_PRECISION = 3;
 	const OBJECT_TYPE = 13;
 	private $probability;
-	private $precision;
 
-	public function __construct($id, $probability, $name = null, $precision = self::DEFAULT_PRECISION) {
+	public function __construct($id, $probability, $name = null) {
 		if ($name === null) {
 			$name = $this->create_name($id);
 		}
@@ -18,8 +17,8 @@ class Rarity extends Object {
 		if(!Valid::percent($probability)) {
 			throw new Exception("Probability must be a percent between 0%-100%, in decimal");
 		}
+		$this->add_default('precision', self::DEFAULT_PRECISION);
 		$this->probability = $probability;
-		$this->precision = $precision;
 	}
 
 	public function get_probability($precision = null) {
@@ -28,7 +27,7 @@ class Rarity extends Object {
 	}
 
 	public function get_precision() {
-		return $this->precision;
+		return $this->get_value('precision');
 	}
 
 	private function create_name($id) {

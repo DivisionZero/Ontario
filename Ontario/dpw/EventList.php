@@ -5,6 +5,7 @@ class EventList extends RarityObjectList {
 	CONST EVENT_FOUND_ITEM  = 3;
 	CONST EVENT_BUY_TOOL 	= 4;
 	CONST EVENT_BUY_POCKET  = 5;
+	CONST EVENT_LOSE_ITEM   = 6;
 	private $predicted_events;
 	private $random_events;
 

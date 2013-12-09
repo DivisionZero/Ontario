@@ -19,4 +19,12 @@ class DPWContent extends Content {
 	protected function no_money_tool() {
 		return ['tool'];
 	}
+
+	protected function found_event() {
+		return ['product'];
+	}
+
+	protected function lose_event() {
+		return ['product'];
+	}
 }

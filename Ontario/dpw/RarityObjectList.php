@@ -17,6 +17,12 @@ class RarityObjectList extends TypeObjectList {
 		return $this->get_random_objects(1)->get_object_by_index(0);
 	}
 
+	public function get_range_objects(Range $range) {
+		$objectlist = new ObjectList($this->list);
+		$count = $range->get_random();
+		return $this->get_random_objects($count);
+	}
+
 	public function get_random_objects($count = 1) {
 		if(!is_numeric($count)) return new ObjectList();
 		$return = array();

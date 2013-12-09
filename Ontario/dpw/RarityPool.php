@@ -2,11 +2,10 @@
 class RarityPool extends TypeObjectList {
 	private $probability_sum;
 	private $sum_list;
-	private $precision;
 
-	public function __construct($anything = null, $precision = Rarity::DEFAULT_PRECISION) {
+	public function __construct($anything = null) {
 		parent::__construct($anything, Rarity::get_object_type());
-		$this->precision = $precision;
+		$this->add_default('precision', Rarity::DEFAULT_PRECISION);
 		$this->update_pool();
 	}
 
@@ -43,7 +42,7 @@ class RarityPool extends TypeObjectList {
 	}
 
 	private function get_rarity($return_index = true) {
-		$precision = pow(10, $this->precision);
+		$precision = pow(10, $this->get_value('precision'));
 		$sum = $this->probability_sum * $precision;
 		$random = rand(1, $sum);
 		$random /= $precision;

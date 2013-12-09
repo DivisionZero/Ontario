@@ -4,22 +4,27 @@ class Result {
 	private $passed;
 	private $error_list;
 
-	private function __construct(boolean $passed, $data = null, ErrorList $errors = null) {
+	private function __construct($passed, $data = null, ErrorList $errors = null) {
 		$this->data = $data;
 		$this->passed = $passed;
 		$this->error_list = $errors;
 	}
 
-	public static function create(boolean $passed, $data = null, ErrorList $errors = null) {
+	public static function create($passed, $data = null, ErrorList $errors = null) {
+		if ($passed) {
+			$passed = 1;
+		} else {
+			$passed = 0;
+		}
 		return new Result($passed, $data, $errors);
 	}
 
 	public function passed() {
-		return $this->passed;
+		return (bool) $this->passed;
 	}
 
 	public function failed() {
-		return !$this->passed;
+		return (bool) !$this->passed;
 	}
 
 	public function data() {

@@ -25,7 +25,7 @@ class BuyToolEvent extends Event {
 				'name' => $this->tool->get_name(),
 				'cost' => $this->tool->get_price(),
 			 ];
-			$this->current_message = DPWContent::get_text('buy_tool', $text_array);
+			$this->current_message = ContentHolder::$content->get_text('buy_tool', $text_array);
 			return Result::create(true, null);
 		} else {
 			return Result::create(false, $this->message_no_money());
@@ -38,6 +38,6 @@ class BuyToolEvent extends Event {
 
 	private function message_no_money() {
 		$text_array = ['tool' => $this->tool->get_name()];
-		return DPWContent::get_text('no_money_tool', $text_array);
+		return ContentHolder::$content->get_text('no_money_tool', $text_array);
 	}
 }

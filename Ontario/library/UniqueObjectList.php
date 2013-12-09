@@ -2,7 +2,7 @@
 class UniqueObjectList extends TypeObjectList {
 	private $id_array;
 
-	public function __construct($anything = array(), Type $type = null) {
+	public function __construct($anything = array(), $type) {
 		parent::__construct($anything, $type);
 		$this->id_array = array();
 		$this->validate_list($this->list);

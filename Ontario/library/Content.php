@@ -1,26 +1,28 @@
 <?
 abstract class Content {
 	protected $content;
-	private static $default_filename;
 
-	public static function init($filename) {
-		self::$default_filename = $filename;
+	public function __construct($filename) {
+		$this->content = [];
+		$this->add_file($filename);
 	}
 
-	public function __construct($filename = null) {
-		if ($filename) {
-			self::$default_filename = $filename;
-			$this->content = [];
-		}
-		if (!$this->content) {
-			if (file_exists(self::$default_filename)) {
-				$this->$content = parse_ini_file($filename, true);
+	public function add_file($filename, $override = true) {
+		if (file_exists($filename)) {
+			$content = parse_ini_file($filename, true);
+			if ($override && count($this->content)) {
+				$this->content += $content;
+			} else if ($override === false) {
+				foreach ($content as $key => $value) {
+					if (!isset($this->content[$key])) {
+						$this->content[$key] = $value;
+					}
+				}
 			} else {
-				throw new Exception("Content file: {$filename} does not exist");
+				$this->content = $content;
 			}
-		}
-		if (!$this->content) {
-			throw new Exception("There are no contents");
+		} else {
+			throw new Exception("Content file: {$filename} does not exist");
 		}
 	}
 
@@ -36,7 +38,7 @@ abstract class Content {
 
 	public function count_content($content_key) {
 		if ($this->has_key($content_key)) {
-			return count($this->$content[$content_key]);
+			return count($this->content[$content_key]);
 		} else {
 			return 0;
 		}
@@ -45,7 +47,7 @@ abstract class Content {
 	protected function _get_parent_text($key, array $values, $index = null) {
 		$called = get_called_class();
 		if (method_exists($called, $key)) {
-			$expected = $called->$key();
+			$expected = $this->$key();
 			if ($this->has_expected($key, $expected, $values, $index)) {
 				return $this->create_content($key, $values, $index);
 			}
@@ -70,14 +72,14 @@ abstract class Content {
 
 	private function has_key($content_key, $index = null) {
 		if (is_null($index)) {
-			return isset($this->$content[$content_key]);
+			return isset($this->content[$content_key]);
 		} else {
-			return isset($this->$content[$content_key][$index]);
+			return isset($this->content[$content_key][$index]);
 		}
 	}
 
 	private function create_content($content_key, $values, $index = null) {
-		$string = $index ? $this->$content[$content_key][$index] : $this->$content[$content_key];
+		$string = $index ? $this->content[$content_key][$index] : $this->content[$content_key];
 		foreach ($values as $key => $value) {
 			$string = str_replace('{'.$key.'}', $value, $string);
 		}

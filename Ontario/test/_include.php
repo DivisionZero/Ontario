@@ -7,7 +7,7 @@ spl_autoload_register(function ($class) {
 	}
 });
 
-DPWContent::init(__DIR__."/../content/dpw.log");
+ContentHolder::init(__DIR__."/../content/dpw.log");
 
 function make_object_list() {
 	$ol = new ObjectList();
@@ -21,6 +21,10 @@ function make_price() {
 	$sp2 = new Spike(rand(1,60), rand(1,100)/100);
 	$range = new Range(rand(1,100), rand(100, 200));
 	return new Price($range, $sp1, $sp2);
+}
+
+function make_range() {
+	return new Range(rand(1,100), rand(100, 200));
 }
 
 function make_rarity() {
